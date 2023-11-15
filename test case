@@ -1,0 +1,46 @@
+import pygame
+import random
+import unittest
+
+def initialize_game():
+    pygame.init()
+    SCREEN_WIDTH = 600
+    SCREEN_HEIGHT = 400
+    screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    obstacles = [pygame.Rect(random.randint(0, 500), random.randint(0, 300), 25, 25) for _ in range(16)]
+    line_start = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    return screen, obstacles, line_start
+
+def detect_collision(obstacle, line_start, mouse_pos):
+    return obstacle.clipline((line_start, mouse_pos))
+
+class TestCollisionGame(unittest.TestCase):
+
+    def test_initialize_game(self):
+        screen, obstacles, line_start = initialize_game()
+        self.assertIsInstance(screen, pygame.Surface)
+        self.assertIsInstance(obstacles, list)
+        self.assertIsInstance(line_start, tuple)
+
+    def test_detect_collision(self):
+        obstacle = pygame.Rect(0, 0, 25, 25)
+        line_start = (300, 200)
+        mouse_pos_collision = (10, 10)
+        mouse_pos_no_collision = (100, 100)
+
+        self.assertTrue(detect_collision(obstacle, line_start, mouse_pos_collision))
+        self.assertFalse(detect_collision(obstacle, line_start, mouse_pos_no_collision))
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+
+
+
+
+
+
+
+
+
